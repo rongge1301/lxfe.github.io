@@ -87,13 +87,18 @@
 
 
 
+<meta name="description" content="该系统是如何使用的">
 <meta property="og:type" content="article">
-<meta property="og:title" content="new">
+<meta property="og:title" content="文档的使用">
 <meta property="og:url" content="http://lxfe.cc/2017/03/28/new/index.html">
 <meta property="og:site_name" content="乐视金融前端组">
-<meta property="og:updated_time" content="2017-03-28T02:31:15.587Z">
+<meta property="og:description" content="该系统是如何使用的">
+<meta property="og:image" content="http://lxfe.cc/images/system/step_1.png">
+<meta property="og:updated_time" content="2017-03-28T08:47:05.214Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="new">
+<meta name="twitter:title" content="文档的使用">
+<meta name="twitter:description" content="该系统是如何使用的">
+<meta name="twitter:image" content="http://lxfe.cc/images/system/step_1.png">
 
 
 
@@ -127,7 +132,7 @@
 
 
 
-  <title> new | 乐视金融前端组 </title>
+  <title> 文档的使用 | 乐视金融前端组 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -188,12 +193,12 @@
     <ul id="menu" class="menu">
       
         
-        <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
             
-            首页
+            分类
           </a>
         </li>
       
@@ -257,7 +262,7 @@
             
             
               
-                new
+                文档的使用
               
             
           </h1>
@@ -282,6 +287,28 @@
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/系统使用/" itemprop="url" rel="index">
+                    <span itemprop="name">系统使用</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -308,7 +335,38 @@
       
 
       
-        
+        <h1 id="该系统是如何使用的"><a href="#该系统是如何使用的" class="headerlink" title="该系统是如何使用的"></a>该系统是如何使用的</h1><a id="more"></a>
+<h2 id="环境需要"><a href="#环境需要" class="headerlink" title="环境需要"></a>环境需要</h2><blockquote>
+<p>Node</p>
+<p>Git</p>
+<p>申请一个Github地址 (咱们的github地址已经创建好)</p>
+</blockquote>
+<h2 id="安装HEXO"><a href="#安装HEXO" class="headerlink" title="安装HEXO"></a>安装HEXO</h2><p>在工程文件夹中<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install -g hexo</div></pre></td></tr></table></figure></p>
+<h2 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hexo init</div></pre></td></tr></table></figure>
+<p>所有工作准备完成</p>
+<hr>
+<h2 id="生成静态页"><a href="#生成静态页" class="headerlink" title="生成静态页"></a>生成静态页</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hexo generate 或 hexo g</div></pre></td></tr></table></figure>
+<h2 id="本地服务启动"><a href="#本地服务启动" class="headerlink" title="本地服务启动"></a>本地服务启动</h2><p>用于本地调试<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hexo server</div></pre></td></tr></table></figure></p>
+<p>在浏览器里输入<a href="http://localhost:4000" target="_blank" rel="external">http://localhost:4000</a></p>
+<h2 id="常见的HEXO配置错误："><a href="#常见的HEXO配置错误：" class="headerlink" title="常见的HEXO配置错误："></a>常见的HEXO配置错误：</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">ERROR Plugin load failed: hexo-server</div><div class="line"></div><div class="line">原因： Besides, utilities are separated into a standalone module. hexo.util is not reachable anymore.</div><div class="line"></div><div class="line">解决方法，执行命令：$ sudo npm install hexo-server --save</div></pre></td></tr></table></figure>
+<hr>
+<h2 id="配置Github"><a href="#配置Github" class="headerlink" title="配置Github"></a>配置Github</h2><h4 id="创建仓库"><a href="#创建仓库" class="headerlink" title="创建仓库"></a>创建仓库</h4><p><img src="/images/system/step_1.png" alt=""></p>
+<h4 id="修改配置"><a href="#修改配置" class="headerlink" title="修改配置"></a>修改配置</h4><p>进入工程根目录，打开_config.yml，翻到最后一部分，修改如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">deploy:</div><div class="line">  type: git</div><div class="line">  repository: git@github.com:rongge1301/lxfe.github.io.git //远成仓库地址</div><div class="line">  branch: master</div></pre></td></tr></table></figure></p>
+<p>执行如下命令使用git部署<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install hexo-deployer-git --save</div></pre></td></tr></table></figure></p>
+<hr>
+<h2 id="部署步骤"><a href="#部署步骤" class="headerlink" title="部署步骤"></a>部署步骤</h2><p>每次部署可以按照如下三步<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">hexo clean</div><div class="line">hexo g</div><div class="line">hexo d</div></pre></td></tr></table></figure></p>
+<p>一下常用命令<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">hexo new &quot;postName&quot; #新建文章</div><div class="line">hexo new page &quot;pageName&quot; #新建页面</div><div class="line">hexo generate #生成静态页面至public目录</div><div class="line">hexo server #开启预览访问端口（默认端口4000，&apos;ctrl + c&apos;关闭server）</div><div class="line">hexo deploy #将.deploy目录部署到GitHub</div><div class="line">hexo help  #查看帮助</div><div class="line">hexo version  #查看Hexo的版本</div></pre></td></tr></table></figure></p>
+<hr>
+<h2 id="显示摘要"><a href="#显示摘要" class="headerlink" title="显示摘要"></a>显示摘要</h2><blockquote>
+<p>在文章中加入<code>&lt;!-- more --&gt;</code>,之后的文章就不会再首页显示</p>
+</blockquote>
+<hr>
+<h2 id="分类管理"><a href="#分类管理" class="headerlink" title="分类管理"></a>分类管理</h2><h4 id="创建分类"><a href="#创建分类" class="headerlink" title="创建分类"></a>创建分类</h4><p>在命令行下输入命令<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hexo new page &quot;分类名&quot; //例如，cms系统</div></pre></td></tr></table></figure></p>
+<h4 id="新建文章"><a href="#新建文章" class="headerlink" title="新建文章"></a>新建文章</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hexo new &quot;cms&quot;</div></pre></td></tr></table></figure>
+<p>用编辑器打开文章，目录地址/source/_posts/cms.md,所有的文章管理都在此目录下,在代码头部增加</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">---</div><div class="line">title: cms系统使用          //标题</div><div class="line">date: 2017-03-23 19:11:50</div><div class="line">tags:</div><div class="line">categories: &quot;cms系统&quot;     //添加一行，问号后面要空一个，设置分类名称</div><div class="line">---</div></pre></td></tr></table></figure>
+<p>即可完成归类,为了管理方便，每篇文章都要设置分类</p>
+
       
     </div>
 
@@ -353,6 +411,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/28/git/" rel="prev" title="'git使用教程'">
+                'git使用教程' <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -399,8 +461,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.gif"
@@ -415,12 +486,21 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-count">5</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
           
 
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
           
 
           
@@ -444,6 +524,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#该系统是如何使用的"><span class="nav-number">1.</span> <span class="nav-text">该系统是如何使用的</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#环境需要"><span class="nav-number">1.1.</span> <span class="nav-text">环境需要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装HEXO"><span class="nav-number">1.2.</span> <span class="nav-text">安装HEXO</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#初始化"><span class="nav-number">1.3.</span> <span class="nav-text">初始化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#生成静态页"><span class="nav-number">1.4.</span> <span class="nav-text">生成静态页</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#本地服务启动"><span class="nav-number">1.5.</span> <span class="nav-text">本地服务启动</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常见的HEXO配置错误："><span class="nav-number">1.6.</span> <span class="nav-text">常见的HEXO配置错误：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置Github"><span class="nav-number">1.7.</span> <span class="nav-text">配置Github</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#创建仓库"><span class="nav-number">1.7.0.1.</span> <span class="nav-text">创建仓库</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#修改配置"><span class="nav-number">1.7.0.2.</span> <span class="nav-text">修改配置</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#部署步骤"><span class="nav-number">1.8.</span> <span class="nav-text">部署步骤</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#显示摘要"><span class="nav-number">1.9.</span> <span class="nav-text">显示摘要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分类管理"><span class="nav-number">1.10.</span> <span class="nav-text">分类管理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#创建分类"><span class="nav-number">1.10.0.1.</span> <span class="nav-text">创建分类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#新建文章"><span class="nav-number">1.10.0.2.</span> <span class="nav-text">新建文章</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
