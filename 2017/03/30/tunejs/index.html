@@ -1,0 +1,778 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="Web 开发中经常会遇到性能的问题，尤其是针对当今的 Web2.0 应用。JavaScript 是当今使用最为广泛的 Web 开发语言，Web 应用的性能问题很大一部分都是由程序员写的 JavaScript 脚本性能不佳所造成的，里面包括了 JavaScript 语言本身的性能问题，以及其与 DOM 交互时的性能问题。本文主要来探讨一下如何尽可能多的避免这类问题，从而最大限度的提高 Web 应用的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="提高 web 应用性能之 JavaScript 性能调优">
+<meta property="og:url" content="http://lxfe.cc/2017/03/30/tunejs/index.html">
+<meta property="og:site_name" content="乐视金融前端组">
+<meta property="og:description" content="Web 开发中经常会遇到性能的问题，尤其是针对当今的 Web2.0 应用。JavaScript 是当今使用最为广泛的 Web 开发语言，Web 应用的性能问题很大一部分都是由程序员写的 JavaScript 脚本性能不佳所造成的，里面包括了 JavaScript 语言本身的性能问题，以及其与 DOM 交互时的性能问题。本文主要来探讨一下如何尽可能多的避免这类问题，从而最大限度的提高 Web 应用的">
+<meta property="og:updated_time" content="2017-03-31T10:42:39.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="提高 web 应用性能之 JavaScript 性能调优">
+<meta name="twitter:description" content="Web 开发中经常会遇到性能的问题，尤其是针对当今的 Web2.0 应用。JavaScript 是当今使用最为广泛的 Web 开发语言，Web 应用的性能问题很大一部分都是由程序员写的 JavaScript 脚本性能不佳所造成的，里面包括了 JavaScript 语言本身的性能问题，以及其与 DOM 交互时的性能问题。本文主要来探讨一下如何尽可能多的避免这类问题，从而最大限度的提高 Web 应用的">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://lxfe.cc/2017/03/30/tunejs/"/>
+
+
+
+
+
+  <title> 提高 web 应用性能之 JavaScript 性能调优 | 乐视金融前端组 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">乐视金融前端组</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://lxfe.cc/2017/03/30/tunejs/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LxFe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="乐视金融前端组">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                提高 web 应用性能之 JavaScript 性能调优
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-30T18:47:50+08:00">
+                2017-03-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术分享/" itemprop="url" rel="index">
+                    <span itemprop="name">技术分享</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Web 开发中经常会遇到性能的问题，尤其是针对当今的 Web2.0 应用。JavaScript 是当今使用最为广泛的 Web 开发语言，Web 应用的性能问题很大一部分都是由程序员写的 JavaScript 脚本性能不佳所造成的，里面包括了 JavaScript 语言本身的性能问题，以及其与 DOM 交互时的性能问题。本文主要来探讨一下如何尽可能多的避免这类问题，从而最大限度的提高 Web 应用的性能。</p>
+<a id="more"></a>
+<p>（来自：<a href="https://www.ibm.com/developerworks/cn/web/1107_zhouxiang_tunejs/index.html" target="_blank" rel="external">IBM 文档库</a>，周 翔, 软件工程师, IBM 分享 ）</p>
+<h1 id="JavaScript-性能调优"><a href="#JavaScript-性能调优" class="headerlink" title="JavaScript 性能调优"></a>JavaScript 性能调优</h1><p>JavaScript 语言由于它的单线程和解释执行的两个特点，决定了它本身有很多地方有性能问题，所以可改进的地方有不少。</p>
+<h2 id="eval-的问题："><a href="#eval-的问题：" class="headerlink" title="eval 的问题："></a>eval 的问题：</h2><p>比较下述代码：</p>
+<blockquote>
+<p><strong>清单 1. eval 的问题</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">var reference = &#123;&#125;, props = “p1”; </div><div class="line">eval(“reference.” + props + “=5”) </div><div class="line"></div><div class="line">var reference = &#123;&#125;, props = “p1”; </div><div class="line">reference[props] = 5</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>有“eval”的代码比没有“eval”的代码要慢上 100 倍以上。<br>主要原因是：JavaScript 代码在执行前会进行类似“预编译”的操作：首先会创建一个当前执行环境下的活动对象，并将那些用 var 申明的变量设置为活动对象的属性，但是此时这些变量的赋值都是 undefined，并将那些以 function 定义的函数也添加为活动对象的属性，而且它们的值正是函数的定义。但是，如果你使用了“eval”，则“eval”中的代码（实际上为字符串）无法预先识别其上下文，无法被提前解析和优化，即无法进行预编译的操作。所以，其性能也会大幅度降低。</p>
+<hr>
+<h2 id="Function-的用法："><a href="#Function-的用法：" class="headerlink" title="Function 的用法："></a>Function 的用法：</h2><p>比较下述代码</p>
+<blockquote>
+<p><strong>清单 2. function 的用法</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">var func1 = new Function(“return arguments[0] + arguments[1]”);</div><div class="line">func1(10, 20); </div><div class="line"></div><div class="line">var func2 = function()&#123; return arguments[0] + arguments[1] &#125;;</div><div class="line">func2(10, 20);</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>这里类似之前提到的“eval”方法，这里“func1”的效率会比“func2”的效率差很多，所以推荐使用第二种方式。</p>
+<hr>
+<h2 id="函数的作用域链（scope-chain）："><a href="#函数的作用域链（scope-chain）：" class="headerlink" title="函数的作用域链（scope chain）："></a>函数的作用域链（scope chain）：</h2><p>JavaScript 代码解释执行，在进入函数内部时，它会预先分析当前的变量，并将这些变量归入不同的层级（level），一般情况下：<br>局部变量放入层级 1（浅），全局变量放入层级 2（深）。如果进入“with”或“try – catch”代码块，则会增加新的层级，即将“with”或“catch”里的变量放入最浅层（层 1），并将之前的层级依次加深。<br>参考如下代码：</p>
+<blockquote>
+<p><strong>清单 3. 函数作用域链</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">var myObj = … .. </div><div class="line">… .. </div><div class="line"> function process()&#123; </div><div class="line">    var images = document.getElementsByTagName(&quot;img&quot;), </div><div class="line">    widget = document.getElementsByTagName(&quot;input&quot;), </div><div class="line">    combination = []; </div><div class="line">    for(var i = 0; i &lt; images.length; i++)&#123; </div><div class="line">        combination.push(combine(images[i], widget[2*i])); </div><div class="line">    &#125; </div><div class="line">    myObj.container.property1 = combination[0]; </div><div class="line">    myObj.container.property2 = combination[combination.length-1]; </div><div class="line"> &#125;</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>这里我们可以看到，“images”，“widget”，“combination”属于局部变量，在层 1。“document”，“myObj”属于全局变量，在层 2。<br>变量所在的层越浅，访问（读取或修改）速度越快，层越深，访问速度越慢。所以这里对“images”，“widget”，“combination”的访问速度比“document”，“myObj”要快一些。所以推荐尽量使用局部变量，可见如下代码：</p>
+<blockquote>
+<p><strong>清单 4. 使用局部变量</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">var myObj = … .. </div><div class="line">… .. </div><div class="line"> function process()&#123; </div><div class="line">    var doc = document;</div><div class="line">    var images = doc.getElementsByTagName(&quot;img&quot;), </div><div class="line">    widget = doc.getElementsByTagName(&quot;input&quot;), </div><div class="line">    combination = []; </div><div class="line">    for(var i = 0; i &lt; images.length; i++)&#123; </div><div class="line">        combination.push(combine(images[i], widget[2*i])); </div><div class="line">    &#125; </div><div class="line">    myObj.container.property1 = combination[0]; </div><div class="line">    myObj.container.property2 = combination[combination.length-1]; </div><div class="line"> &#125;</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>我们用局部变量“doc”取代全局变量“document”，这样可以改进性能，尤其是对于大量使用全局变量的函数里面。<br>再看如下代码：</p>
+<blockquote>
+<p><strong>清单 5. 慎用 with</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">var myObj = … .. </div><div class="line">… .. </div><div class="line"> function process()&#123; </div><div class="line">    var doc = document; </div><div class="line">    var images = doc.getElementsByTagName(&quot;img&quot;), </div><div class="line">    widget = doc.getElementsByTagName(&quot;input&quot;), </div><div class="line">    combination = []; </div><div class="line">    for(var i = 0; i &lt; images.length; i++)&#123; </div><div class="line">        combination.push(combine(images[i], widget[2*i])); </div><div class="line">    &#125; </div><div class="line">    with (myObj.container) &#123;</div><div class="line">        property1 = combination[0];</div><div class="line">        property2 = combination[combination.length-1];</div><div class="line">    &#125;</div><div class="line"> &#125;</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>加上“with”关键字，我们让代码更加简洁清晰了，但是这样做性能会受影响。正如之前说的，当我们进入“with”代码块时，“combination”便从原来的层 1 变到了层 2，这样，效率会大打折扣。所以比较一下，还是使用原来的代码：</p>
+<blockquote>
+<p><strong>清单 6. 改进 with</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">var myObj = … .. </div><div class="line">… .. </div><div class="line"> function process()&#123; </div><div class="line">    var doc = document; </div><div class="line">    var images = doc.getElementsByTagName(&quot;img&quot;), </div><div class="line">    widget = doc.getElementsByTagName(&quot;input&quot;), </div><div class="line">    combination = []; </div><div class="line">    for(var i = 0; i &lt; images.length; i++)&#123; </div><div class="line">        combination.push(combine(images[i], widget[2*i])); </div><div class="line">    &#125; </div><div class="line">    myObj.container.property1 = combination[0];</div><div class="line">    myObj.container.property2 = combination[combination.length-1];</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>但是这样并不是最好的方式，JavaScript 有个特点，对于 object 对象来说，其属性访问层级越深，效率越低，比如这里的“myObj”已经访问到了第 3 层，我们可以这样改进一下：</p>
+<blockquote>
+<p><strong>清单 7. 缩小对象访问层级</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">var myObj = … .. </div><div class="line">… .. </div><div class="line"> function process()&#123; </div><div class="line">    var doc = document; </div><div class="line">    var images = doc.getElementsByTagName(&quot;img&quot;), </div><div class="line">    widget = doc.getElementsByTagName(&quot;input&quot;), </div><div class="line">    combination = []; </div><div class="line">    for(var i = 0; i &lt; images.length; i++)&#123; </div><div class="line">        combination.push(combine(images[i], widget[2*i])); </div><div class="line">    &#125; </div><div class="line">    var ctn = myObj.container;</div><div class="line">    ctn.property1 = combination[0];</div><div class="line">    ctn.property2 = combination[combination.length-1];</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>我们用局部变量来代替“myObj”的第 2 层的“container”对象。如果有大量的这种对对象深层属性的访问，可以参照以上方式提高性能。</p>
+<hr>
+<h2 id="字符串（String）相关"><a href="#字符串（String）相关" class="headerlink" title="字符串（String）相关"></a>字符串（String）相关</h2><h3 id="字符串拼接"><a href="#字符串拼接" class="headerlink" title="字符串拼接"></a>字符串拼接</h3><p>经常看到这样的代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">str += “str1” + “str2”</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p><strong>清单 9. 字符串数组方式拼接</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">var str_array = []; </div><div class="line">str_array.push(“str1”); </div><div class="line">str_array.push(“str2”); </div><div class="line">str = str_array.join(“”);</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>这里我们利用数组（array）的“join”方法实现字符串的拼接，尤其是程序的老版本的 Internet Explore（IE6）上运行时，会有非常明显的性能上的改进。<br>当然，最新的浏览器（如火狐 Firefox3+，IE8+ 等等）对字符串的拼接做了优化，我们也可以这样写：</p>
+<blockquote>
+<p><strong>清单 10. 字符串快速拼接</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">str +=“str1”</div><div class="line">str +=“str2”</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>新的浏览器对“+=”做了优化，性能略快于数组的“join”方法。在不久的将来更新版本浏览器可能对“+”也会做优化，所以那时我们可以直接写：str += “str1” + “str2”。</p>
+<h3 id="隐式类型转换"><a href="#隐式类型转换" class="headerlink" title="隐式类型转换"></a>隐式类型转换</h3><p>参考如下代码：</p>
+<blockquote>
+<p><strong>清单 11. 隐式类型转换</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">var str = “12345678”, arr = []; </div><div class="line">for(var i = 0; i &lt;= s.length; i++)&#123; </div><div class="line">    arr.push( str.charAt(i)); </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>这里我们在每个循环时都会调用字符串的“charAt”方法，但是由于我们是将常量“12345678”赋值给“str”，所以“str”这里事实上并不是一个字符串对象，当它每次调用“charAt”函数时，都会临时构造值为“12345678”的字符串对象，然后调用“charAt”方法，最后再释放这个字符串临时对象。我们可以做一些改进：</p>
+<blockquote>
+<p><strong>清单 12. 避免隐式类型转换</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">var str = new Stirng(“12345678”), arr = []; </div><div class="line">for(var i = 0; i &lt;= s.length; i++)&#123; </div><div class="line">    arr.push( str.charAt(i)); </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>这样一来，变量“str”作为一个字符串对象，就不会有这种隐式类型转换的过程了，这样一来，效率会显著提高。</p>
+<h3 id="字符串匹配"><a href="#字符串匹配" class="headerlink" title="字符串匹配"></a>字符串匹配</h3><p>JavaScript 有 RegExp 对象，支持对字符串的正则表达式匹配。是一个很好的工具，但是它的性能并不是非常理想。相反，字符串对象（String）本身的一些基本方法的效率是非常高的，比如“substring”，“indexOf”，“charAt”等等，在我们需要用正则表达式匹配字符串时，可以考虑一下：</p>
+<ol>
+<li>是否能够通过字符串对象本身支持的基本方法解决问题。</li>
+<li>是否可以通过“substring”来缩小需要用正则表达式的范围。</li>
+</ol>
+<p>这些方式都能够有效的提高程序的效率。<br>关于正则表达式对象，还有一点需要注意，参考如下代码：</p>
+<blockquote>
+<p><strong>清单 13. 正则表达式</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">for(var i = 0; i &lt;= str_array.length; i++)&#123; </div><div class="line">    if(str_array[i].match(/^s*extra\s/))&#123; </div><div class="line">        ……………………</div><div class="line">    &#125; </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>这里，我们往“match”方法传入“<code>/^s*extra\s/</code>”是会影响效率的，它会构建临时值为“<code>/^s*extra\s/</code>”的正则表达式对象，执行“match”方法，然后销毁临时的正则表达式对象。我们可以这样做：</p>
+<blockquote>
+<p><strong>清单 14. 利用变量</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">var sExpr = /^s*extra\s/;</div><div class="line">for(var i = 0; i &lt;= str_array.length; i++)&#123; </div><div class="line">    if(str_array[i].match(sExpr))&#123; </div><div class="line">    ……………………</div><div class="line">    &#125; </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>这样就不会有临时对象了。</p>
+<p><strong>setTimeout 和 setInterval</strong></p>
+<p>“setTimeout”和“setInterval”这两个函数可以接受字符串变量，但是会带来和之前谈到的“eval”类似的性能问题，所以建议还是直接传入函数对象本身。</p>
+<h3 id="利用提前退出"><a href="#利用提前退出" class="headerlink" title="利用提前退出"></a>利用提前退出</h3><p>参考如下两段代码：</p>
+<blockquote>
+<p>清单 15. 利用提前退出<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"> // 代码 1</div><div class="line"> var name = … .; </div><div class="line"> var source = …… ; </div><div class="line"> if(source.match(/ …… /))&#123; </div><div class="line">……………………………</div><div class="line"> &#125; </div><div class="line"></div><div class="line"></div><div class="line"> // 代码 2</div><div class="line"> var name = … .; </div><div class="line"> var source = …… ; </div><div class="line"> if(name.indexOf( … ) &amp;&amp;source.match(/ …… /))&#123; </div><div class="line">……………………………</div><div class="line"> &#125;</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>代码 2 多了一个对“name.indexOf( … )”的判断，这使得程序每次走到这一段时会先执行“indexOf”的判断，再执行后面的“match”，在“indexOf”比“match”效率高很多的前提下，这样做会减少“match”的执行次数，从而一定程度的提高效率。</p>
+<hr>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/30/process/" rel="next" title="流程管控">
+                <i class="fa fa-chevron-left"></i> 流程管控
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="LxFe" />
+          <p class="site-author-name" itemprop="name">LxFe</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#JavaScript-性能调优"><span class="nav-number">1.</span> <span class="nav-text">JavaScript 性能调优</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#eval-的问题："><span class="nav-number">1.1.</span> <span class="nav-text">eval 的问题：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Function-的用法："><span class="nav-number">1.2.</span> <span class="nav-text">Function 的用法：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#函数的作用域链（scope-chain）："><span class="nav-number">1.3.</span> <span class="nav-text">函数的作用域链（scope chain）：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字符串（String）相关"><span class="nav-number">1.4.</span> <span class="nav-text">字符串（String）相关</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#字符串拼接"><span class="nav-number">1.4.1.</span> <span class="nav-text">字符串拼接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#隐式类型转换"><span class="nav-number">1.4.2.</span> <span class="nav-text">隐式类型转换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字符串匹配"><span class="nav-number">1.4.3.</span> <span class="nav-text">字符串匹配</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#利用提前退出"><span class="nav-number">1.4.4.</span> <span class="nav-text">利用提前退出</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">LxFe</span>
+</div>
+
+<!--
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+-->
+
+<canvas id="c_n1" width="100%" height="100%" style="position: fixed; top: 0px; left: 0px; z-index: -1; opacity: 0.5;">
+</canvas>
+<script type="text/javascript" src="/js/mouse.js?v=5.1.0"></script>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
